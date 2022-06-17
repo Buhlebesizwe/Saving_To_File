@@ -2,6 +2,8 @@ package challenge_2;
 
 import java.util.*;
 
+import static challenge_2.Employee.*;
+
 public class EmployeeDetails {
 
     public static void main(String[] args) throws Exception {
@@ -30,26 +32,26 @@ public class EmployeeDetails {
             switch (choice) {
                 // get employee details
                 case 1:
-                    Employee.addEmployee();
+                    addEmployee();
                     break;
-                //Display empoyees
+                //Display employees
                 case 2:
-                    Employee.display();
+                    display();
                     break;
                 //search employee
                 case 3:
-                    Employee.searchEmployee();
+                    searchEmployee();
                     break;
                 //delete employee
                 case 4:
-                        Employee.deleteEmployee();
+                    deleteEmployee();
                     break;
                 //update employee
                 case 5:
-                    Employee.updateEmployee();
+                    updateEmployee();
                     break;
                 case 6:
-                    Employee.sortEmployee();
+                    sortEmployee();
                     break;
                 default :
                     System.out.println("Choice must be between -1 and 7");

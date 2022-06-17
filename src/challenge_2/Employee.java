@@ -1,22 +1,10 @@
 package challenge_2;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.ListIterator;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,9 +74,8 @@ public class Employee implements Serializable {
             try {
                 if (m.find()) {
                     System.out.print("Please enter a valid date of birth. \n");
-                    validation = false;
                 } else {
-                    String dateParts[] = isDate.split("/");
+                    String[] dateParts = isDate.split("/");
 
                     // Getting  year from date
                     String year = dateParts[2];
@@ -99,7 +86,6 @@ public class Employee implements Serializable {
 
                     if (current_year - theYear < 18) {
                         System.out.print("An employee cannot be younger than  18, please enter a valid date of birth. \n");
-                        validation = false;
                     } else if (current_year - theYear >= 18) {
                         date_of_birth = isDate;
                         Date date = format.parse(date_of_birth);
@@ -111,7 +97,6 @@ public class Employee implements Serializable {
             }
         } catch (ParseException e) {
             System.out.print("Please enter a valid date of birth. \n");
-            validation = false;
         }
         date_of_birth = isDate;
 
@@ -119,7 +104,7 @@ public class Employee implements Serializable {
     }
 
 //Add employee
-    public static void addEmployee() throws FileNotFoundException, IOException, Exception {
+    public static void addEmployee() throws  IOException, Exception {
         int number = 0;
         do {
 
@@ -129,9 +114,9 @@ public class Employee implements Serializable {
             }
             String name = sString.nextLine();
 
-            System.out.print("Enter Emplyee Surname: ");
+            System.out.print("Enter Employee Surname: ");
             while (!sString.hasNext("[A-Za-z]*")) {
-                System.out.print(sString.nextLine() + " is not a valid surname please enter a valid surnname: ");
+                System.out.print(sString.nextLine() + " is not a valid surname please enter a valid surname: ");
             }
             String surname = sString.nextLine();
 
@@ -141,7 +126,7 @@ public class Employee implements Serializable {
             do {
                 System.out.print("Enter Employee Email: ");
                 str = sString.nextLine();
-                if (Employee.isEmailExist(str) == true) {
+                if (Employee.isEmailExist(str)) {
                     System.out.print("Email already exist. \n");
                     eValidation = false;
                 } else if (Employee.isEmail(str)) {
@@ -151,7 +136,7 @@ public class Employee implements Serializable {
                     eValidation = false;
                 }
                 email = str;
-            } while (eValidation == false);
+            } while (!eValidation);
 
             String date_of_birth;
             String d;
@@ -159,9 +144,9 @@ public class Employee implements Serializable {
             do {
                 System.out.print("Enter your date of birth(dd/MM/yyyy): ");
                 d = sString.nextLine();
-                isDate = Employee.isDate(d) == true;
+                isDate = Employee.isDate(d);
                 date_of_birth = d;
-            } while (isDate == false);
+            } while (!isDate);
             aList.add(new Employee(name, surname, email, date_of_birth));
             number++;
         } while (number < 0);
@@ -172,7 +157,7 @@ public class Employee implements Serializable {
     }
 
 //Display Employees
-    public static void display() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void display() throws  IOException, ClassNotFoundException {
         if (file.isFile()) {
             ois = new ObjectInputStream(new FileInputStream(file));
             aList = (ArrayList<Employee>) ois.readObject();
@@ -189,7 +174,7 @@ public class Employee implements Serializable {
     }
 //Search employee
 
-    public static void searchEmployee() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void searchEmployee() throws  IOException, ClassNotFoundException {
 
         if (file.isFile()) {
             ois = new ObjectInputStream(new FileInputStream(file));
@@ -241,9 +226,9 @@ public class Employee implements Serializable {
                     }
                     String name = sString.nextLine();
 
-                    System.out.print("Enter Emplyee Surname: ");
+                    System.out.print("Enter Employee Surname: ");
                     while (!sString.hasNext("[A-Za-z]*")) {
-                        System.out.print(sString.nextLine() + " is not a valid surname please enter a valid surnname: ");
+                        System.out.print(sString.nextLine() + " is not a valid surname please enter a valid surname: ");
                     }
                     String surname = sString.nextLine();
 
@@ -253,9 +238,9 @@ public class Employee implements Serializable {
                     do {
                         System.out.print("Enter your date of birth(dd/MM/yyyy): ");
                         d = sString.nextLine();
-                        isDate = Employee.isDate(d) == true;
+                        isDate = Employee.isDate(d);
                         date_of_birth = d;
-                    } while (isDate == false);
+                    } while (!isDate);
                     li.set(new Employee(name, surname, empEmail, date_of_birth));
                     found = true;
                 }
@@ -275,7 +260,7 @@ public class Employee implements Serializable {
     }
 
 //Delete employee
-    public static void deleteEmployee() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void deleteEmployee() throws  IOException, ClassNotFoundException {
 
         if (file.isFile()) {
             ois = new ObjectInputStream(new FileInputStream(file));
@@ -310,13 +295,13 @@ public class Employee implements Serializable {
     }
 
 //sort employees
-    public static void sortEmployee() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void sortEmployee() throws IOException, ClassNotFoundException {
         if (file.isFile()) {
             ois = new ObjectInputStream(new FileInputStream(file));
             aList = (ArrayList<Employee>) ois.readObject();
             ois.close();
 
-            Collections.sort(aList, new NameComparator());
+            aList.sort(new NameComparator());
 
             oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(aList);
